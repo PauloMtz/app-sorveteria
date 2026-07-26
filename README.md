@@ -2,7 +2,7 @@
 
 Projeto Django para aplicação de sorveteria.
 
-O repositório base foi baixado de [opencodigos/DjangoProjetoConfiguracao at DjangoProjetoConfiguracaoCompleta](https://github.com/opencodigos/DjangoProjetoConfiguracao/tree/DjangoProjetoConfiguracaoCompleta) e está sendo usado como ponto de partida para o primeiro commit.
+O repositório base foi baixado de [opencodigos/DjangoProjetoConfiguracao at DjangoProjetoConfiguracaoCompleta](https://github.com/opencodigos/DjangoProjetoConfiguracao/tree/DjangoProjetoConfiguracaoCompleta).
 
 ## Requisitos
 
@@ -62,7 +62,7 @@ Atualmente a aplicação já possui:
 - Template base com Bootstrap e carregamento de arquivos estáticos
 - Context processor global com a variável `social`, exibida na página inicial
 - Django Admin habilitado na rota `/admin/`
-- Modelos `Embalagem` e `TipoSabor` criados, migrados e registrados no admin
+- Modelos `Embalagem`, `TipoSabor` e `Sabor` criados e registrados no admin
 
 ### Modelos disponíveis no admin
 
@@ -83,11 +83,34 @@ Representa os tipos de sabor cadastrados no sistema, com os campos:
 - `ativo`
 - `preco`
 
+#### Sabor
+
+Representa os sabores individuais cadastrados no sistema, com os campos:
+
+- `nome`
+- `tipo` (relacionamento com `TipoSabor`)
+- `ativo`
+
+Cada `Sabor` pertence a um `TipoSabor`, permitindo classificar sabores como Tradicional, Premium, Sorbet ou Açaí.
+
+## Rotas da aplicação
+
+Atualmente o projeto expõe as seguintes rotas:
+
+- `/` - página inicial da aplicação
+- `/admin/` - painel administrativo do Django
+
+### Origem das rotas
+
+- `core/urls.py` define a rota `/admin/` e inclui as rotas do app `myapp`
+- `myapp/urls.py` define a rota `/`, apontando para a view `index`
+
 ## Executar o projeto
 
 Com o ambiente configurado e as dependências instaladas:
 
 ```bash
+python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
@@ -125,4 +148,4 @@ Neste momento, o projeto permite:
 1. Executar a aplicação localmente
 2. Acessar a página inicial
 3. Entrar no painel administrativo
-4. Cadastrar, editar e remover registros de `Embalagem` e `TipoSabor` pelo admin
+4. Cadastrar, editar e remover registros de `Embalagem`, `TipoSabor` e `Sabor` pelo admin
