@@ -42,8 +42,24 @@ class Sabor(models.Model):
     ativo = models.BooleanField() 
     
     def __str__(self):
-        return f'{self.nome} | PREÇO: R$ {self.tipo.preco:.2f}'
+        return f'{self.nome} - PREÇO: R$ {self.tipo.preco:.2f}'
 
     class Meta:
         verbose_name = 'Sabor'
         verbose_name_plural = '3. Sabores'
+
+# Coberturas Disponiveis (Adicionais)
+class Cobertura(models.Model):
+    nome = models.CharField(max_length=50)
+    ativo = models.BooleanField()
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def preco_formatado(self):
+        return f'R$ {self.preco:.2f}'
+    
+    def __str__(self):
+        return f'{self.nome} - PREÇO: R$ {self.preco:.2f}'
+    
+    class Meta:
+        verbose_name = 'Cobertura'
+        verbose_name_plural = '4. Coberturas'
