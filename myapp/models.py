@@ -17,3 +17,18 @@ class Embalagem(models.Model):
         verbose_name = 'Embalagem'
         verbose_name_plural = 'Embalagens'
 
+# Tradicional / Premium / Sorbet / Açai
+class TipoSabor(models.Model):
+    tipo = models.CharField(max_length=100)
+    ativo = models.BooleanField()
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def preco_formatado(self):
+        return f'R$ {self.preco:.2f}'
+    
+    def __str__(self):
+        return f'{self.tipo} - PREÇO: R$ {self.preco:.2f}'
+
+    class Meta:
+        verbose_name = 'Sabor'
+        verbose_name_plural = 'Sabores'
