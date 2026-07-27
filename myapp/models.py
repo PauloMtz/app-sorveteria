@@ -63,3 +63,30 @@ class Cobertura(models.Model):
     class Meta:
         verbose_name = 'Cobertura'
         verbose_name_plural = '4. Coberturas'
+
+# Monta o Pote       
+class MontaPote(models.Model):
+    embalagem = models.ForeignKey(Embalagem, 
+        related_name='embalagem', on_delete=models.CASCADE, null=True)
+    cobertura = models.ManyToManyField(Cobertura)
+    quantidade = models.PositiveIntegerField(null=True)
+
+    def __str__(self):
+        return f"ID: {self.id} / POTE: {self.embalagem.tipo}"
+
+    class Meta:
+        verbose_name = 'Montar Pote'
+        verbose_name_plural = 'b. Montar Potes'
+
+# Seleciona Sabores
+class SelSabor(models.Model):
+    pote = models.ForeignKey(MontaPote, related_name='pote', on_delete=models.CASCADE, null=True)
+    sabor = models.ForeignKey(Sabor, related_name='sabor', on_delete=models.CASCADE, null=True)
+    quantidade_bolas = models.PositiveIntegerField()
+    
+    def __str__(self):
+        return f"Sabor: {self.sabor.nome}, Quantidade de Bolas: {self.quantidade_bolas}"
+    
+    class Meta:
+        verbose_name = 'Selecionar Sabor'
+        verbose_name_plural = 'a. Selecionar Sabores'
