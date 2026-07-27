@@ -62,7 +62,7 @@ Atualmente a aplicação já possui:
 - Template base com Bootstrap e carregamento de arquivos estáticos
 - Context processor global com a variável `social`, exibida na página inicial
 - Django Admin habilitado na rota `/admin/`
-- Modelos `Embalagem`, `TipoSabor`, `Sabor`, `Cobertura`, `MontaPote` e `SelSabor` criados e registrados no admin
+- Modelos `Embalagem`, `TipoSabor`, `Sabor`, `Cobertura`, `MontaPote`, `SelSabor`, `SacolaItens` e `Pedido` criados e registrados no admin
 
 ### Modelos disponíveis no admin
 
@@ -116,6 +116,23 @@ Representa a seleção de sabores para um pote montado, com os campos:
 - `pote` (relacionamento com `MontaPote`)
 - `sabor` (relacionamento com `Sabor`)
 - `quantidade_bolas`
+
+#### SacolaItens
+
+Representa o carrinho com os potes selecionados, com os campos:
+
+- `potes` (relacionamento muitos-para-muitos com `MontaPote`)
+- `preco`
+
+#### Pedido
+
+Representa o fechamento do pedido do cliente, com os campos:
+
+- `data_pedido`
+- `user` (relacionamento com `User` do Django)
+- `itens_da_sacola` (relacionamento um-para-um com `SacolaItens`)
+- `status`
+- `pago`
 
 ## Rotas da aplicação
 
@@ -184,4 +201,11 @@ Neste momento, o projeto permite:
 1. Executar a aplicação localmente
 2. Acessar a página inicial
 3. Entrar no painel administrativo
-4. Cadastrar, editar e remover registros de `Embalagem`, `TipoSabor`, `Sabor`, `Cobertura`, `MontaPote` e `SelSabor` pelo admin
+4. Cadastrar, editar e remover registros de `Embalagem`, `TipoSabor`, `Sabor`, `Cobertura`, `MontaPote`, `SelSabor`, `SacolaItens` e `Pedido` pelo admin
+
+## Próximas etapas
+
+Com a etapa de modelagem finalizada, os próximos passos da aplicação serão:
+
+1. Implementar os cálculos de preço, composição e fechamento dos pedidos
+2. Desenvolver a parte do site voltada ao usuário externo

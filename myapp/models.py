@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Embalagem(models.Model):
@@ -90,3 +91,36 @@ class SelSabor(models.Model):
     class Meta:
         verbose_name = 'Selecionar Sabor'
         verbose_name_plural = 'a. Selecionar Sabores'
+
+# Sacolas de Itens (Carrinho)
+class SacolaItens(models.Model):
+    potes = models.ManyToManyField(MontaPote)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+  
+    def preco_formatado(self):
+        return f'R$ {self.preco:.2f}'
+
+    def __str__(self):
+        return f"CARINHO: {self.id}"
+
+    class Meta:
+        verbose_name = 'Carrinho'
+        verbose_name_plural = 'c. Carrinho'
+
+# Registro do Pedido
+class Pedido(models.Model):
+    data_pedido = models.DateTimeField(auto_now_add=True, null=True)
+    user = models.ForeignKey(User, related_name='pedido_user', on_delete=models.PROTECT)
+    itens_da_sacola = models.OneToOneField(SacolaItens, on_delete=models.CASCADE, null=True)    
+    status = models.BooleanField()
+    pago = models.BooleanField()
+
+    # Endereço
+    # Pagamento
+
+    def __str__(self):
+        return f"Pedido: {self.id} / {self.user} / (PAGO: {self.pago})"
+
+    class Meta:
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'd. Pedido'
