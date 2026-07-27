@@ -146,6 +146,25 @@ Atualmente o projeto expõe as seguintes rotas:
 - `core/urls.py` define a rota `/admin/` e inclui as rotas do app `myapp`
 - `myapp/urls.py` define a rota `/`, apontando para a view `index`
 
+## Organização do Django Admin
+
+Além do registro simples dos modelos no admin, a aplicação também utiliza `TabularInline` para facilitar o cadastro de relacionamentos diretamente na mesma tela.
+
+### Uso de `TabularInline`
+
+No arquivo `myapp/admin.py`, o `TabularInline` foi aplicado nos seguintes pontos:
+
+- `SelSaborInline`: permite cadastrar vários registros de `SelSabor` dentro da edição de `MontaPote`
+- `MontaPoteInline`: permite visualizar e relacionar os potes associados à `SacolaItens` em formato tabular
+
+Com essa abordagem, o preenchimento no admin fica mais prático, porque os itens relacionados podem ser gerenciados sem sair da tela principal do objeto pai.
+
+### Estrutura atual no admin
+
+- `MontaPoteAdmin` usa `SelSaborInline` para montar o pote e seus sabores na mesma página
+- `SacolaItensAdmin` exibe o campo `preco` como somente leitura e usa os inlines para relacionar os potes da sacola e o pedido vinculado
+- `PedidoInline` foi configurado para que o pedido associado à sacola também possa ser acompanhado dentro da tela de `SacolaItens`
+
 ## Executar o projeto
 
 Com o ambiente configurado e as dependências instaladas:
@@ -202,6 +221,7 @@ Neste momento, o projeto permite:
 2. Acessar a página inicial
 3. Entrar no painel administrativo
 4. Cadastrar, editar e remover registros de `Embalagem`, `TipoSabor`, `Sabor`, `Cobertura`, `MontaPote`, `SelSabor`, `SacolaItens` e `Pedido` pelo admin
+5. Montar potes com sabores relacionados e organizar a sacola de itens diretamente pelas telas com `TabularInline`
 
 ## Próximas etapas
 
