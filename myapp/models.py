@@ -72,8 +72,21 @@ class MontaPote(models.Model):
     cobertura = models.ManyToManyField(Cobertura)
     quantidade = models.PositiveIntegerField(null=True)
 
+    def preco_total(self):
+        preco_embalagem = self.embalagem.preco if self.embalagem else 0
+        preco_coberturas = sum(cobertura.preco for cobertura in self.cobertura.all())
+        preco_sabores = 0
+        for selsabor in self.pote.all(): 
+            preco_sabor = selsabor.sabor.tipo.preco
+            quantidade_bolas = selsabor.quantidade_bolas
+            preco_sabores += preco_sabor * quantidade_bolas
+
+        total_pote = preco_embalagem + preco_coberturas + preco_sabores
+        total = total_pote * self.quantidade 
+        return total
+
     def __str__(self):
-        return f"ID: {self.id} / POTE: {self.embalagem.tipo}"
+        return f"ID: {self.id} / POTE: {self.embalagem.tipo} / Qtd: {self.quantidade} / {self.preco_total()}"
 
     class Meta:
         verbose_name = 'Montar Pote'
@@ -96,12 +109,20 @@ class SelSabor(models.Model):
 class SacolaItens(models.Model):
     potes = models.ManyToManyField(MontaPote)
     preco = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+
+    def preco_total(self):
+        sacola_total = 0
+        for pote in self.potes.all():
+            sacola_total += pote.preco_total()
+        self.preco = sacola_total
+        self.save()
+        return sacola_total
   
     def preco_formatado(self):
         return f'R$ {self.preco:.2f}'
 
     def __str__(self):
-        return f"CARINHO: {self.id}"
+        return f"CARRINHO: {self.id} / {self.preco_total()}"
 
     class Meta:
         verbose_name = 'Carrinho'
