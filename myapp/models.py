@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from .services import calcular_preco_total_pote, calcular_preco_total_sacola
+
 # Create your models here.
 class Embalagem(models.Model):
     tipo = models.CharField(max_length=50)
@@ -73,17 +75,7 @@ class MontaPote(models.Model):
     quantidade = models.PositiveIntegerField(null=True)
 
     def preco_total(self):
-        preco_embalagem = self.embalagem.preco if self.embalagem else 0
-        preco_coberturas = sum(cobertura.preco for cobertura in self.cobertura.all())
-        preco_sabores = 0
-        for selsabor in self.pote.all(): 
-            preco_sabor = selsabor.sabor.tipo.preco
-            quantidade_bolas = selsabor.quantidade_bolas
-            preco_sabores += preco_sabor * quantidade_bolas
-
-        total_pote = preco_embalagem + preco_coberturas + preco_sabores
-        total = total_pote * self.quantidade 
-        return total
+        return calcular_preco_total_pote(self)
 
     def __str__(self):
         return f"ID: {self.id} / POTE: {self.embalagem.tipo} / Qtd: {self.quantidade} / {self.preco_total()}"
@@ -111,12 +103,7 @@ class SacolaItens(models.Model):
     preco = models.DecimalField(max_digits=10, decimal_places=2, null=True)
 
     def preco_total(self):
-        sacola_total = 0
-        for pote in self.potes.all():
-            sacola_total += pote.preco_total()
-        self.preco = sacola_total
-        self.save()
-        return sacola_total
+        return calcular_preco_total_sacola(self)
   
     def preco_formatado(self):
         return f'R$ {self.preco:.2f}'
